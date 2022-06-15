@@ -40,15 +40,15 @@ Before the interview, please make sure you have the report about your work to di
 
 6. **Apply deployment and service for Jenkins:**
 
-    <kubectl apply -f jenkins-deploy.yaml>
+    kubectl apply -f jenkins-deploy.yaml
 
 7. **Apply deployment and service for Keycloak:**
 
-    <kubectl apply -f keycloak-deploy.yaml>
+    kubectl apply -f keycloak-deploy.yaml
 
 8. **Apply Ingress and FrontendConfig.**
 
-    <kubectl apply -f ingress.yaml>
+    kubectl apply -f ingress.yaml
   
 ![1](screenshots/1.png)  
 
