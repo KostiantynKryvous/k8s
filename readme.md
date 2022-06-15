@@ -63,5 +63,5 @@ Before the interview, please make sure you have the report about your work to di
 11. **Integrate Keycloak with Jenkins**
 
 12. **Working links:**   
-[jenkins.mrbr.uno](jenkins.mrbr.uno)   
-[keycloak.mrbr.uno](keycloak.mrbr.uno)   
+[http://jenkins.mrbr.uno](http://jenkins.mrbr.uno)   
+[http://keycloak.mrbr.uno](http://keycloak.mrbr.uno)   
