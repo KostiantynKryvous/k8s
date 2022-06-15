@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: "default"
+  labels:
+    app: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      containers:
+      - name: jenkins
+        image: jenkins/jenkins:lts
+        ports:
+        - protocol: TCP
+          containerPort: 8080
+        securityContext:
+          allowPrivilegeEscalation: true
+          privileged: true
+          readOnlyRootFilesystem: false
+          runAsUser: 0
+        livenessProbe:
+          httpGet:
+            port: 8080
+            path: /login
+          initialDelaySeconds: 60
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            port: 8080
+            path: /login
+        volumeMounts:
+        - mountPath: /var/jenkins_home
+          name: jenkins-vol
+      volumes:
+      - name: jenkins-vol
+        # This GCE PD must already exist.
+        gcePersistentDisk:
+          pdName: disk-for-jenkins-k8s
+          fsType: ext4
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins
+  annotations:
+    cloud.google.com/app-protocols: '{"http-port":"HTTP"}'
+    cloud.google.com/neg: '{"ingress": true}'
+spec:
+  selector:
+    app: jenkins
+  ports:
+  - name: http-port
+    port: 80
+    targetPort: 8080

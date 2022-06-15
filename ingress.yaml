@@ -1,0 +1,45 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jenkins-keycloak-ingress
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+    kubernetes.io/ingress.global-static-ip-name: my-ip-keycloak
+    ingress.gcp.kubernetes.io/pre-shared-cert: for-mrbr
+    networking.gke.io/v1beta1.FrontendConfig: frontend-config
+spec:
+  rules:
+  - host: jenkins.mrbr.uno
+    http:
+      paths:
+      - path: /*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: jenkins
+            port:
+              name: http-port
+  - host: keycloak.mrbr.uno
+    http:
+      paths:
+      - path: /*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: keycloak
+            port:
+              number: 80
+
+---
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+  name: frontend-config
+spec:
+  sslPolicy: "ssl-policy"
+  redirectToHttps:
+    enabled: true
+    responseCodeName: MOVED_PERMANENTLY_DEFAULT #301
+
+  
